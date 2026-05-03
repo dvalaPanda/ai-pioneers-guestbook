@@ -1,0 +1,35 @@
+{
+  "name": "pioneers-guestbook",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "deploy": "vite build && wrangler deploy --config dist/client/pioneers_guestbook/wrangler.json",
+    "typecheck": "tsc -b --noEmit",
+    "db:create": "wrangler d1 create pioneers-guestbook",
+    "db:migrate:local": "wrangler d1 migrations apply pioneers-guestbook --local",
+    "db:migrate:remote": "wrangler d1 migrations apply pioneers-guestbook --remote"
+  },
+  "dependencies": {
+    "d3-geo": "^3.1.1",
+    "d3-geo-projection": "^4.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "topojson-client": "^3.1.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.13.0",
+    "@cloudflare/workers-types": "^4.20251001.0",
+    "@types/d3-geo": "^3.1.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/topojson-client": "^3.1.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.3.0",
+    "wrangler": "^4.0.0"
+  }
+}
