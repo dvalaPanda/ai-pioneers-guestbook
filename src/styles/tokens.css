@@ -1,0 +1,20 @@
+/* Default palette is parchment (locked decision). The TweaksPanel can swap
+   palettes by mutating these properties on document.documentElement. */
+:root {
+  --bg: #efe9da;
+  --bg-2: #e2d9c3;
+  --paper: #f7f1e1;
+  --ink: #161310;
+  --ink-2: #2a2520;
+  --muted: #7d756a;
+  --muted-2: #b3a995;
+  --line: #d6cdb6;
+  --line-2: #bfb497;
+  --accent: #5d2230;
+  --accent-soft: #955062;
+  --gold: #a48345;
+
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}

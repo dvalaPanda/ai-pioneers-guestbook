@@ -1,0 +1,77 @@
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseRing {
+  0% {
+    r: 3;
+    opacity: 0.7;
+  }
+  100% {
+    r: 14;
+    opacity: 0;
+  }
+}
+.pin-pulse {
+  animation: pulseRing 2.4s ease-out infinite;
+  transform-origin: center;
+}
+
+@keyframes ctaPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(122, 42, 42, 0.35),
+      0 8px 24px -8px rgba(26, 24, 20, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(122, 42, 42, 0),
+      0 8px 24px -8px rgba(26, 24, 20, 0.25);
+  }
+}
+.cta-pulse {
+  animation: ctaPulse 2.6s ease-in-out infinite;
+}
+
+@keyframes entrySlide {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.entry-anim {
+  animation: entrySlide 360ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .pin-pulse,
+  .cta-pulse {
+    animation: none !important;
+  }
+}
