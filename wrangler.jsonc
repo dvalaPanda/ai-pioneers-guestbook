@@ -10,13 +10,13 @@
     "not_found_handling": "single-page-application"
   },
   "vars": {
-    "TURNSTILE_SITE_KEY": "1x00000000000000000000AA"
+    "TURNSTILE_SITE_KEY": "0x4AAAAAADIL9UWdZJJ3fIkR"
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "pioneers-guestbook",
-      "database_id": "REPLACE_WITH_ID_FROM_npm_run_db_create",
+      "database_id": "6279a2bc-e466-4833-a0f6-4cf5f6df623e",
       "migrations_dir": "migrations"
     }
   ],
