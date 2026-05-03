@@ -5,15 +5,16 @@ import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 interface WireframeGlobeProps {
   size?: number;
+  animate?: boolean;
 }
 
-function WireframeGlobe({ size = 140 }: WireframeGlobeProps) {
+function WireframeGlobe({ size = 140, animate = true }: WireframeGlobeProps) {
   const land = useLandData();
   const reduced = usePrefersReducedMotion();
   const [lambda, setLambda] = useState(0);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !animate) return;
     let raf = 0;
     let last = performance.now();
     const tick = (now: number) => {
@@ -24,7 +25,7 @@ function WireframeGlobe({ size = 140 }: WireframeGlobeProps) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [reduced]);
+  }, [reduced, animate]);
 
   const proj = useMemo(() => {
     const p = geoOrthographic().clipAngle(90);
@@ -66,7 +67,7 @@ export function Loader({ visible }: { visible: boolean }) {
     <div className={`loader ${visible ? "" : "hidden"}`} aria-hidden={visible ? undefined : true}>
       <div className="loader-stack">
         <div className="loader-mark">The Pioneers' Guestbook</div>
-        <WireframeGlobe size={140} />
+        <WireframeGlobe size={140} animate={visible} />
         <div className="loader-tagline">A register of arrivals, kept by hand.</div>
       </div>
     </div>

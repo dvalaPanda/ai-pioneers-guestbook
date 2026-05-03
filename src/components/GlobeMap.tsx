@@ -67,6 +67,13 @@ export function GlobeMap({
   const world = useWorldData();
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  const rotationRef = useRef(rotation);
+  const panRef = useRef(pan);
+  const zoomRef = useRef(zoom);
+  rotationRef.current = rotation;
+  panRef.current = pan;
+  zoomRef.current = zoom;
+
   const projection = useMemo(
     () => makeProjection(projectionId, width, height, rotation),
     [projectionId, width, height, rotation],
@@ -81,9 +88,9 @@ export function GlobeMap({
     const pointers = new Map<number, { x: number; y: number }>();
     let mode: "drag" | "pinch" | null = null;
     let last: { x: number; y: number } | null = null;
-    let startRot: [number, number, number] = [...rotation] as [number, number, number];
-    let startPan: [number, number] = [...pan] as [number, number];
-    let startZoom = zoom;
+    let startRot: [number, number, number] = [...rotationRef.current] as [number, number, number];
+    let startPan: [number, number] = [...panRef.current] as [number, number];
+    let startZoom = zoomRef.current;
     let startDist = 0;
     let startMid: { x: number; y: number } | null = null;
 
@@ -100,17 +107,17 @@ export function GlobeMap({
       if (pointers.size === 1) {
         mode = "drag";
         last = { x: e.clientX, y: e.clientY };
-        startRot = [...rotation] as [number, number, number];
-        startPan = [...pan] as [number, number];
+        startRot = [...rotationRef.current] as [number, number, number];
+        startPan = [...panRef.current] as [number, number];
         svg.style.cursor = "grabbing";
       } else if (pointers.size === 2) {
         mode = "pinch";
         const pts = [...pointers.values()];
         startDist = distance(pts[0]!, pts[1]!);
         startMid = midpoint(pts[0]!, pts[1]!);
-        startZoom = zoom;
-        startPan = [...pan] as [number, number];
-        startRot = [...rotation] as [number, number, number];
+        startZoom = zoomRef.current;
+        startPan = [...panRef.current] as [number, number];
+        startRot = [...rotationRef.current] as [number, number, number];
       }
     };
 
@@ -121,7 +128,7 @@ export function GlobeMap({
         const dx = e.clientX - last.x;
         const dy = e.clientY - last.y;
         if (isGlobe) {
-          const sensitivity = 0.4 / zoom;
+          const sensitivity = 0.4 / zoomRef.current;
           setRotation([
             startRot[0] + dx * sensitivity,
             Math.max(-90, Math.min(90, startRot[1] - dy * sensitivity)),
@@ -157,8 +164,8 @@ export function GlobeMap({
         mode = "drag";
         const remaining = [...pointers.values()][0]!;
         last = { x: remaining.x, y: remaining.y };
-        startRot = [...rotation] as [number, number, number];
-        startPan = [...pan] as [number, number];
+        startRot = [...rotationRef.current] as [number, number, number];
+        startPan = [...panRef.current] as [number, number];
       }
     };
 
@@ -175,7 +182,7 @@ export function GlobeMap({
       svg.removeEventListener("pointerup", onUp);
       svg.removeEventListener("pointercancel", onUp);
     };
-  }, [isGlobe, rotation, setRotation, pan, setPan, zoom, setZoom]);
+  }, [isGlobe, setRotation, setPan, setZoom]);
 
   // Wheel: pinch-zoom or scroll-pan / scroll-rotate.
   useEffect(() => {

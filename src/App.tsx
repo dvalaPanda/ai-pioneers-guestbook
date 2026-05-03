@@ -122,16 +122,14 @@ export default function App() {
   useEffect(() => {
     if (projectionId !== "globe" || !spinning || tweaks.rotationSpeed === 0) return;
     if (reducedMotion) return;
-    let raf = 0;
     let last = performance.now();
-    const tick = (now: number) => {
+    const interval = window.setInterval(() => {
+      const now = performance.now();
       const dt = (now - last) / 1000;
       last = now;
       setRotation((r) => [r[0] + dt * 60 * tweaks.rotationSpeed, r[1], r[2]]);
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    }, 1000 / 30);
+    return () => window.clearInterval(interval);
   }, [projectionId, spinning, tweaks.rotationSpeed, reducedMotion]);
 
   const submitWelcome = async (loc: PickedLocation, turnstileToken: string) => {
@@ -198,7 +196,7 @@ export default function App() {
   };
 
   const sidebarW = isMobile ? 0 : 340;
-  const sidebarH = isMobile ? Math.min(vp.h * 0.42, 380) : 0;
+  const sidebarH = isMobile ? Math.min(vp.h * 0.32, 320) : 0;
   const mapW = isMobile ? vp.w : Math.max(0, vp.w - sidebarW);
   const mapH = isMobile ? Math.max(0, vp.h - sidebarH) : vp.h;
 
@@ -521,6 +519,7 @@ export default function App() {
           setHoveredId={setHoveredId}
           onLeaveNote={() => setNoteOpen(true)}
           isMobile={isMobile}
+          mobileHeight={sidebarH}
         />
       )}
 

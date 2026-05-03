@@ -9,6 +9,7 @@ export interface SidebarProps {
   setHoveredId: (id: string | null) => void;
   onLeaveNote: () => void;
   isMobile: boolean;
+  mobileHeight?: number;
 }
 
 interface CountryRow {
@@ -18,7 +19,7 @@ interface CountryRow {
 }
 
 export function Sidebar(props: SidebarProps) {
-  const { visitors, notes, totals, setHoveredId, onLeaveNote, isMobile } = props;
+  const { visitors, notes, totals, setHoveredId, onLeaveNote, isMobile, mobileHeight } = props;
 
   const ranked: CountryRow[] = useMemo(() => {
     const tally = new Map<string, CountryRow>();
@@ -41,7 +42,7 @@ export function Sidebar(props: SidebarProps) {
     <aside
       style={{
         width: isMobile ? "100%" : 340,
-        height: "100%",
+        height: isMobile ? mobileHeight : "100%",
         borderLeft: isMobile ? "none" : "0.5px solid var(--line)",
         borderTop: isMobile ? "0.5px solid var(--line)" : "none",
         background: "var(--bg)",
