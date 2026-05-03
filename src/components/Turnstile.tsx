@@ -56,6 +56,7 @@ export interface TurnstileProps {
 export function Turnstile({ siteKey, onToken, onExpire, onError }: TurnstileProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<string | null>(null);
+  const normalizedSiteKey = siteKey.trim();
   // Stash the latest callbacks in refs so the render effect doesn't re-render
   // the widget every time the parent rebinds them.
   const onTokenRef = useRef(onToken);
@@ -68,17 +69,20 @@ export function Turnstile({ siteKey, onToken, onExpire, onError }: TurnstileProp
   });
 
   useEffect(() => {
+    if (!normalizedSiteKey) return;
     let cancelled = false;
-    loadScript().then(() => {
-      if (cancelled || !hostRef.current || !window.turnstile) return;
-      widgetRef.current = window.turnstile.render(hostRef.current, {
-        sitekey: siteKey,
-        theme: "light",
-        callback: (token) => onTokenRef.current(token),
-        "expired-callback": () => onExpireRef.current?.(),
-        "error-callback": () => onErrorRef.current?.(),
-      });
-    });
+    loadScript()
+      .then(() => {
+        if (cancelled || !hostRef.current || !window.turnstile) return;
+        widgetRef.current = window.turnstile.render(hostRef.current, {
+          sitekey: normalizedSiteKey,
+          theme: "light",
+          callback: (token) => onTokenRef.current(token),
+          "expired-callback": () => onExpireRef.current?.(),
+          "error-callback": () => onErrorRef.current?.(),
+        });
+      })
+      .catch(() => onErrorRef.current?.());
     return () => {
       cancelled = true;
       if (widgetRef.current && window.turnstile) {
@@ -90,7 +94,7 @@ export function Turnstile({ siteKey, onToken, onExpire, onError }: TurnstileProp
         widgetRef.current = null;
       }
     };
-  }, [siteKey]);
+  }, [normalizedSiteKey]);
 
   return <div ref={hostRef} />;
 }
