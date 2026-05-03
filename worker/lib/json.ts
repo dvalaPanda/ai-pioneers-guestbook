@@ -1,0 +1,13 @@
+export const json = (
+  body: unknown,
+  status = 200,
+  extra: HeadersInit = {},
+): Response =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...extra,
+    },
+  });
